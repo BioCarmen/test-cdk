@@ -28,7 +28,7 @@ export class TestCdkStack extends Stack {
           "arn:aws:codestar-connections:us-east-1:355621124855:connection/db98cb5e-3357-4118-a0ad-b2c3c7453e03",
         owner: "BioCarmen",
         repo: "test-v1",
-        branch: "master",
+        branch: "main",
         triggerOnPush: true,
       }),
 
