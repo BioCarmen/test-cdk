@@ -1,5 +1,6 @@
 import * as codepipeline from "@aws-cdk/aws-codepipeline";
 import * as codepipeline_actions from "@aws-cdk/aws-codepipeline-actions";
+import { CodeStarConnectionsSourceAction } from "@aws-cdk/aws-codepipeline-actions";
 import { Construct, SecretValue, Stack, StackProps } from "@aws-cdk/core";
 import { CdkPipeline, SimpleSynthAction } from "@aws-cdk/pipelines";
 
@@ -20,13 +21,15 @@ export class TestCdkStack extends Stack {
       cloudAssemblyArtifact,
 
       // Where the source can be found
-      sourceAction: new codepipeline_actions.GitHubSourceAction({
+      sourceAction: new CodeStarConnectionsSourceAction({
         actionName: "GitHub",
         output: sourceArtifact,
-        oauthToken: SecretValue.secretsManager("github-token"),
+        connectionArn:
+          "arn:aws:codestar-connections:us-east-1:355621124855:connection/db98cb5e-3357-4118-a0ad-b2c3c7453e03",
         owner: "BioCarmen",
-        repo: "demo-api",
+        repo: "test-v1",
         branch: "master",
+        triggerOnPush: true,
       }),
 
       // How it will be built and synthesized
