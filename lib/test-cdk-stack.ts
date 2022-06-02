@@ -2,7 +2,7 @@ import * as codepipeline from "@aws-cdk/aws-codepipeline";
 import * as codepipeline_actions from "@aws-cdk/aws-codepipeline-actions";
 import { Construct, SecretValue, Stack, StackProps } from "@aws-cdk/core";
 import { CdkPipeline, SimpleSynthAction } from "@aws-cdk/pipelines";
-import { CdkpipelinesDemoStage } from "./cdkpipelines-demo-stage";
+
 import { ShellScriptAction } from "@aws-cdk/pipelines";
 import { MyPipelineAppStage } from "./stage";
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
