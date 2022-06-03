@@ -19,13 +19,11 @@ export class CodePipelinePostToGitHub extends Construct {
     }
   ) {
     super(scope, id);
-    console.log("in the pipeline", props);
+    console.log("in the pipeline");
     const lambda = new Function(this, "Function", {
-      code: Code.fromAsset(path.resolve(__dirname, "lambda"), {}),
-      handler: "github-handler.handler",
-      timeout: Duration.seconds(30),
-      logRetention: RetentionDays.ONE_MONTH,
-      runtime: Runtime.NODEJS_14_X,
+      runtime: Runtime.NODEJS_14_X, //using node for this, but can easily use python or other
+      handler: "handler.handler",
+      code: Code.fromAsset(path.join(__dirname, "lambda")), //resolving to ./lambda directory
     });
 
     // // Allow the Lambda to query CodePipeline for more details on the build that triggered the event
