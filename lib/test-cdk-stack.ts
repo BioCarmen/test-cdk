@@ -10,6 +10,7 @@ import { CdkPipeline, SimpleSynthAction } from "@aws-cdk/pipelines";
 import { ShellScriptAction } from "@aws-cdk/pipelines";
 import { CodePipelinePostToGitHub } from "./github-lambda-stack";
 import { MyPipelineAppStage } from "./stage";
+import * as secretsmanager from "@aws-cdk/aws-secretsmanager";
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 
 export class TestCdkStack extends Stack {
@@ -45,11 +46,19 @@ export class TestCdkStack extends Stack {
         buildCommand: "npm run build",
       }),
     });
-    const secret = SecretValue.secretsManager("github-token");
+    const secret = secretsmanager.Secret.fromSecretNameV2(
+      this,
+      "token",
+      "github-token"
+    );
     console.log(secret);
     new CodePipelinePostToGitHub(this, "CodePipelinePostToGithub", {
       pipeline: pipeline.codePipeline,
-      githubToken: SecretValue.secretsManager("github-token").toString(),
+      githubToken: secretsmanager.Secret.fromSecretNameV2(
+        this,
+        "token",
+        "github-token"
+      ).toString(),
     });
     const preprod = new MyPipelineAppStage(this, "test", {
       env: { account: "355621124855", region: "us-east-1" },
