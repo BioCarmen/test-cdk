@@ -46,19 +46,11 @@ export class TestCdkStack extends Stack {
         buildCommand: "npm run build",
       }),
     });
-    const secret = secretsmanager.Secret.fromSecretNameV2(
-      this,
-      "token",
-      "github-token"
-    );
+    const secret = SecretValue.secretsManager("github-token");
     console.log(secret);
     new CodePipelinePostToGitHub(this, "CodePipelinePostToGithub", {
       pipeline: pipeline.codePipeline,
-      githubToken: secretsmanager.Secret.fromSecretNameV2(
-        this,
-        "token",
-        "github-token"
-      ).toString(),
+      githubToken: SecretValue.secretsManager("github-token").toString(),
     });
     const preprod = new MyPipelineAppStage(this, "test", {
       env: { account: "355621124855", region: "us-east-1" },
