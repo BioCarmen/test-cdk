@@ -8,6 +8,7 @@ import { Construct, SecretValue, Stack, StackProps } from "@aws-cdk/core";
 import { CdkPipeline, SimpleSynthAction } from "@aws-cdk/pipelines";
 
 import { ShellScriptAction } from "@aws-cdk/pipelines";
+import { CodePipelinePostToGitHub } from "./github-lambda-stack";
 import { MyPipelineAppStage } from "./stage";
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 
@@ -43,6 +44,10 @@ export class TestCdkStack extends Stack {
         // We need a build step to compile the TypeScript Lambda
         buildCommand: "npm run build",
       }),
+    });
+    new CodePipelinePostToGitHub(this, "CodePipelinePostToGithub", {
+      pipeline: pipeline.codePipeline,
+      githubToken: SecretValue.secretsManager("github-token").toString(),
     });
     const preprod = new MyPipelineAppStage(this, "test", {
       env: { account: "355621124855", region: "us-east-1" },
