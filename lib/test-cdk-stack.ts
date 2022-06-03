@@ -45,6 +45,8 @@ export class TestCdkStack extends Stack {
         buildCommand: "npm run build",
       }),
     });
+    const secret = SecretValue.secretsManager("github-token");
+    console.log(secret);
     new CodePipelinePostToGitHub(this, "CodePipelinePostToGithub", {
       pipeline: pipeline.codePipeline,
       githubToken: SecretValue.secretsManager("github-token").toString(),
