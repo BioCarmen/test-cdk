@@ -6,10 +6,6 @@ export class CodePipelinePostToGitHubStage extends Stage {
   constructor(scope: Construct, stageName: string, props?: StageProps) {
     super(scope, stageName, props);
 
-    const lambdaStack = new CodePipelinePostToGitHub(
-      this,
-      "LambdaStack",
-      props
-    );
+    const lambdaStack = new CodePipelinePostToGitHub(this, "LambdaStack");
   }
 }
