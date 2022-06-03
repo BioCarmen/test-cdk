@@ -1,13 +1,13 @@
 export const handler = async (event: any) => {
   console.log(event);
-  const region = event.region;
-  const pipelineName = event.detail.pipeline;
-  const executionId = event.detail["execution-id"];
-  const state = transformState(event.detail.state);
+  //   const region = event.region;
+  //   const pipelineName = event.detail.pipeline;
+  //   const executionId = event.detail["execution-id"];
+  //   const state = transformState(event.detail.state);
 
-  if (state === null) {
-    return;
-  }
+  //   if (state === null) {
+  //     return;
+  //   }
 
   //   const result = await getPipelineExecution(pipelineName, executionId);
   //   const payload = createPayload(pipelineName, region, state);

@@ -19,14 +19,14 @@ export class CodePipelinePostToGitHub extends Construct {
     }
   ) {
     super(scope, id);
-
-    // const lambda = new Function(this, "Function", {
-    //   code: Code.fromAsset(path.resolve(__dirname, "lambda"), {}),
-    //   handler: "github-handler.handler",
-    //   timeout: Duration.seconds(30),
-    //   logRetention: RetentionDays.ONE_MONTH,
-    //   runtime: Runtime.NODEJS_14_X,
-    // });
+    console.log("in the pipeline");
+    const lambda = new Function(this, "Function", {
+      code: Code.fromAsset(path.resolve(__dirname, "lambda"), {}),
+      handler: "github-handler.handler",
+      timeout: Duration.seconds(30),
+      logRetention: RetentionDays.ONE_MONTH,
+      runtime: Runtime.NODEJS_14_X,
+    });
 
     // // Allow the Lambda to query CodePipeline for more details on the build that triggered the event
     // lambda.addToRolePolicy(
@@ -35,7 +35,7 @@ export class CodePipelinePostToGitHub extends Construct {
     //     resources: [this.props.pipeline],
     //   })
     // );
-    console.log(this.props.githubToken);
+
     // Allow the Lambda to post to a private GitHub API on behalf of the repo owner
     // lambda.addEnvironment("ACCESS_TOKEN", this.props.githubToken);
 
