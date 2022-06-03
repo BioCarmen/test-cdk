@@ -13,13 +13,13 @@ export class CodePipelinePostToGitHub extends Construct {
   constructor(
     scope: Construct,
     id: string,
-    private props: {
+    private props?: {
       pipeline: Pipeline;
       githubToken: string;
     }
   ) {
     super(scope, id);
-    console.log("in the pipeline");
+    console.log("in the pipeline", props);
     const lambda = new Function(this, "Function", {
       code: Code.fromAsset(path.resolve(__dirname, "lambda"), {}),
       handler: "github-handler.handler",
