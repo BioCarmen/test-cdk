@@ -50,25 +50,38 @@ import {
   Stack,
   StackProps,
 } from "@aws-cdk/core";
+import { PolicyStatement, Effect } from "@aws-cdk/aws-iam";
+import * as codepipeline from "@aws-cdk/aws-codepipeline";
 import { Function, InlineCode, Runtime, Code } from "@aws-cdk/aws-lambda";
 import * as path from "path";
-import { Pipeline } from "@aws-cdk/aws-codepipeline";
+
+import { LambdaFunction } from "@aws-cdk/aws-events-targets";
 
 export class CodePipelinePostToGitHub extends Construct {
   constructor(
     scope: Construct,
     id: string,
     private props: {
-      pipeline: Pipeline;
+      pipeline: codepipeline.Pipeline;
       githubToken: string;
     }
   ) {
     super(scope, id);
-    console.log(this.props.githubToken);
-    new Function(this, "LambdaFunction", {
+    console.log("interesting");
+    const githubLambda = new Function(this, "githubLambdaStack", {
       runtime: Runtime.NODEJS_14_X, //using node for this, but can easily use python or other
       handler: "github-handler.handler",
       code: Code.fromAsset(path.join(__dirname, "lambda")), //resolving to ./lambda directory
+    });
+
+    githubLambda.addToRolePolicy(
+      new PolicyStatement({
+        actions: ["codepipeline:GetPipelineExecution"],
+        resources: [this.props.pipeline.pipelineArn],
+      })
+    );
+    this.props.pipeline.onStateChange("onStateChange", {
+      target: new LambdaFunction(githubLambda),
     });
   }
 }
