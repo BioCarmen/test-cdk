@@ -1,14 +1,20 @@
-import * as cdk from "aws-cdk-lib";
-import { Construct } from "constructs";
-import { Function, InlineCode, Runtime, Code } from "aws-cdk-lib/aws-lambda";
+import {
+  CfnOutput,
+  Stage,
+  StageProps,
+  Construct,
+  Stack,
+  StackProps,
+} from "@aws-cdk/core";
+import { Function, InlineCode, Runtime, Code } from "@aws-cdk/aws-lambda";
 import * as path from "path";
 
-export class MyLambdaStack extends cdk.Stack {
+export class MyLambdaStack extends Stack {
   constructor(
     scope: Construct,
     id: string,
     stageName: string,
-    props?: cdk.StackProps
+    props?: StackProps
   ) {
     super(scope, id, props);
     new Function(this, "LambdaFunction", {
