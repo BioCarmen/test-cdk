@@ -46,11 +46,16 @@ export class TestCdkStack extends Stack {
         buildCommand: "npm run build",
       }),
     });
-    const secret = SecretValue.secretsManager("github-token");
+
+    const secret = SecretValue.secretsManager(
+      "arn:aws:secretsmanager:us-east-1:355621124855:secret:github-token-b7BN8L"
+    );
     console.log(secret);
     new CodePipelinePostToGitHub(this, "CodePipelinePostToGithub", {
       pipeline: pipeline.codePipeline,
-      githubToken: SecretValue.secretsManager("github-token").toString(),
+      githubToken: SecretValue.secretsManager(
+        "arn:aws:secretsmanager:us-east-1:355621124855:secret:github-token-b7BN8L"
+      ).toString(),
     });
     const preprod = new MyPipelineAppStage(this, "test", {
       env: { account: "355621124855", region: "us-east-1" },
