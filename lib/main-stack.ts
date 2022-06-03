@@ -11,7 +11,7 @@ import { ShellScriptAction } from "@aws-cdk/pipelines";
 
 import { MyPipelineAppStage } from "./stage";
 import * as secretsmanager from "@aws-cdk/aws-secretsmanager";
-import { CodePipelinePostToGitHubStage } from "./github-stage";
+import { CodePipelinePostToGitHub } from "./github-lambda-stack";
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 
 export class TestCdkStack extends Stack {
@@ -53,14 +53,6 @@ export class TestCdkStack extends Stack {
       "github-token"
     ).toString();
 
-    const postGithub = new CodePipelinePostToGitHubStage(
-      this,
-      "CodePipelinePostToGithub",
-      {
-        env: { account: "355621124855", region: "us-east-1" },
-      }
-    );
-    pipeline.addApplicationStage(postGithub);
     const preprod = new MyPipelineAppStage(this, "test", {
       env: { account: "355621124855", region: "us-east-1" },
     });
@@ -81,6 +73,11 @@ export class TestCdkStack extends Stack {
     // );
     const postprod = new MyPipelineAppStage(this, "prod", {
       env: { account: "355621124855", region: "us-east-1" },
+    });
+
+    new CodePipelinePostToGitHub(this, "CodePipelinePostToGithub", {
+      pipeline: pipeline.codePipeline,
+      githubToken: secret,
     });
     // testingStage.addPre(
     //   new ShellStep("Run Unit Tests", { commands: ["npm install", "npm test"] })

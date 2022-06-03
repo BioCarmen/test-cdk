@@ -52,10 +52,19 @@ import {
 } from "@aws-cdk/core";
 import { Function, InlineCode, Runtime, Code } from "@aws-cdk/aws-lambda";
 import * as path from "path";
+import { Pipeline } from "@aws-cdk/aws-codepipeline";
 
-export class CodePipelinePostToGitHub extends Stack {
-  constructor(scope: Construct, id: string, props?: StackProps) {
-    super(scope, id, props);
+export class CodePipelinePostToGitHub extends Construct {
+  constructor(
+    scope: Construct,
+    id: string,
+    private props: {
+      pipeline: Pipeline;
+      githubToken: string;
+    }
+  ) {
+    super(scope, id);
+    console.log(this.props.githubToken);
     new Function(this, "LambdaFunction", {
       runtime: Runtime.NODEJS_14_X, //using node for this, but can easily use python or other
       handler: "github-handler.handler",
