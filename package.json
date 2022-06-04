@@ -29,5 +29,8 @@
     "constructs": "^10.0.0",
     "node-fetch": "^3.2.5",
     "source-map-support": "^0.5.21"
-  }
+  },
+  "files": [
+    "dist"
+  ]
 }
