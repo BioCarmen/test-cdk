@@ -13,6 +13,8 @@ export const handler = async (event: any) => {
   }
 
   const result = await getPipelineExecution(pipelineName, executionId);
+  console.log(result);
+  console.log(pipelineName, executionId);
   const payload = createPayload(pipelineName, region, state);
 
   if (!result) {
