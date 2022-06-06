@@ -5564,7 +5564,7 @@ var handler = async (event) => {
     return;
   }
   const result = await getPipelineExecution(pipelineName, executionId);
-  console.log(result);
+  console.log("get piplelineExecution", result);
   console.log(pipelineName, executionId);
   const payload = createPayload(pipelineName, region, state);
   if (!result) {
@@ -5634,15 +5634,18 @@ function createPayload(pipelineName, region, status) {
   };
 }
 var postStatusToGitHub = async (owner, repository, sha, payload) => {
-  const url = `https://api.github.com/repos/BioCarmen/test-cdk/statuses/${sha}`;
-  await fetch(url, {
+  const url = `https://api.github.com/repos/BioCarmen/test-cdk/deployments`;
+  const _payload = { ...payload, ref: sha };
+  const response = await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: getPersonalAccessToken()
     },
-    body: payload
+    body: _payload
   });
+  const res = await response.json();
+  console.log(res);
 };
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
