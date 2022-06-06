@@ -5634,7 +5634,7 @@ function createPayload(pipelineName, region, status) {
   };
 }
 var postStatusToGitHub = async (owner, repository, sha, payload) => {
-  const url = `/${owner}/${repository}/statuses/${sha}`;
+  const url = `/biocarmen/test-cdk/statuses/${sha}`;
   await fetch(url, {
     method: "POST",
     headers: {
