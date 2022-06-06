@@ -120,10 +120,8 @@ const postStatusToGitHub = async (
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: getPersonalAccessToken(),
+      Authorization: `token ${getPersonalAccessToken()}`,
     },
     body: _payload,
   });
-  const res = await response.json();
-  console.log(res);
 };
