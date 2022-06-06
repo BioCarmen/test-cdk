@@ -113,7 +113,7 @@ const postStatusToGitHub = async (
   sha: any,
   payload: any
 ) => {
-  const url = `/BioCarmen/test-cdk/statuses/${sha}`;
+  const url = `https://api.github.com/repos/BioCarmen/test-cdk/statuses/${sha}`;
   //   const url = `/${owner}/${repository}/statuses/${sha}`;
 
   await fetch(url, {
