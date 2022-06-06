@@ -13,7 +13,7 @@ export const handler = async (event: any) => {
   }
 
   const result = await getPipelineExecution(pipelineName, executionId);
-  console.log(result);
+  console.log("get piplelineExecution", result);
   console.log(pipelineName, executionId);
   const payload = createPayload(pipelineName, region, state);
 
@@ -113,15 +113,17 @@ const postStatusToGitHub = async (
   sha: any,
   payload: any
 ) => {
-  const url = `https://api.github.com/repos/BioCarmen/test-cdk/statuses/${sha}`;
+  const url = `https://api.github.com/repos/BioCarmen/test-cdk/deployments`;
   //   const url = `/${owner}/${repository}/statuses/${sha}`;
-
-  await fetch(url, {
+  const _payload = { ...payload, ref: sha };
+  const response = await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: getPersonalAccessToken(),
     },
-    body: payload,
+    body: _payload,
   });
+  const res = await response.json();
+  console.log(res);
 };
