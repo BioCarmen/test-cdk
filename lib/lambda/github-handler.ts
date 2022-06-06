@@ -22,12 +22,12 @@ export const handler = async (event: any) => {
     return;
   }
 
-  //   await postStatusToGitHub(
-  //     result.owner,
-  //     result.repository,
-  //     result.sha,
-  //     payload
-  //   );
+  await postStatusToGitHub(
+    result.owner,
+    result.repository,
+    result.sha,
+    payload
+  );
 
   console.log(
     `Successfully notified GitHub repository ${result.owner}/${result.repository} for commit ${result.sha} with payload:`,
@@ -107,21 +107,21 @@ function createPayload(pipelineName: string, region: string, status: string) {
   };
 }
 
-// const postStatusToGitHub = async (
-//   owner: string | undefined,
-//   repository: string | undefined,
-//   sha: any,
-//   payload: any
-// ) => {
-//   const url = `/biocarmen/test-cdk/statuses/${sha}`;
-//   //   const url = `/${owner}/${repository}/statuses/${sha}`;
+const postStatusToGitHub = async (
+  owner: string | undefined,
+  repository: string | undefined,
+  sha: any,
+  payload: any
+) => {
+  const url = `/BioCarmen/test-cdk/statuses/${sha}`;
+  //   const url = `/${owner}/${repository}/statuses/${sha}`;
 
-//   await fetch(url, {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//       Authorization: getPersonalAccessToken(),
-//     },
-//     body: payload,
-//   });
-// };
+  await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: getPersonalAccessToken(),
+    },
+    body: payload,
+  });
+};

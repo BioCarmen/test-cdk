@@ -80,6 +80,8 @@ export class CodePipelinePostToGitHub extends Construct {
         resources: [this.props.pipeline.pipelineArn],
       })
     );
+
+    githubLambda.addEnvironment("ACCESS_TOKEN", props.githubToken);
     this.props.pipeline.onStateChange("onStateChange", {
       target: new LambdaFunction(githubLambda),
     });
