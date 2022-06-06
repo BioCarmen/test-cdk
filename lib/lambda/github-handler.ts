@@ -22,13 +22,13 @@ export const handler = async (event: any) => {
     return;
   }
 
-  await postStatusToGitHub(
+  const response = await postStatusToGitHub(
     result.owner,
     result.repository,
     result.sha,
     payload
   );
-
+  console.log("post response", response);
   console.log(
     `Successfully notified GitHub repository ${result.owner}/${result.repository} for commit ${result.sha} with payload:`,
     payload

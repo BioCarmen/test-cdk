@@ -5571,7 +5571,8 @@ var handler = async (event) => {
     console.error(`Can not resolve pipeline execution`);
     return;
   }
-  await postStatusToGitHub(result.owner, result.repository, result.sha, payload);
+  const response = await postStatusToGitHub(result.owner, result.repository, result.sha, payload);
+  console.log("post response", response);
   console.log(`Successfully notified GitHub repository ${result.owner}/${result.repository} for commit ${result.sha} with payload:`, payload);
 };
 var getPersonalAccessToken = () => {
