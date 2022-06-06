@@ -117,12 +117,18 @@ const postStatusToGitHub = async (
   const url = `https://api.github.com/repos/BioCarmen/test-cdk/deployments`;
   //   const url = `/${owner}/${repository}/statuses/${sha}`;
   const _payload = { ...payload, ref: sha };
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `token ${getPersonalAccessToken()}`,
-    },
-    body: _payload,
-  });
+  console.log(_payload, sha);
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `token ${getPersonalAccessToken()}`,
+      },
+      body: _payload,
+    });
+    console.log(response);
+  } catch (error) {
+    console.log(error);
+  }
 };
