@@ -5587,6 +5587,7 @@ var getPipelineExecution = async (pipelineName, executionId) => {
     pipelineExecutionId: executionId
   };
   const result = await new AWS.CodePipeline().getPipelineExecution(params).promise();
+  console.log("get result from execution", result);
   const artifactRevision = (_b = (_a = result == null ? void 0 : result.pipelineExecution) == null ? void 0 : _a.artifactRevisions) == null ? void 0 : _b.find(() => true);
   console.log(result);
   console.log((_c = result == null ? void 0 : result.pipelineExecution) == null ? void 0 : _c.artifactRevisions);
@@ -5640,12 +5641,10 @@ var postStatusToGitHub = async (owner, repository, sha, payload) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: getPersonalAccessToken()
+      Authorization: `token ${getPersonalAccessToken()}`
     },
     body: _payload
   });
-  const res = await response.json();
-  console.log(res);
 };
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {

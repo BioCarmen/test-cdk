@@ -53,6 +53,7 @@ const getPipelineExecution = async (
   const result = await new AWS.CodePipeline()
     .getPipelineExecution(params)
     .promise();
+  console.log("get result from execution", result);
   const artifactRevision = result?.pipelineExecution?.artifactRevisions?.find(
     () => true
   );
