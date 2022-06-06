@@ -1,0 +1,9 @@
+name: start deployment
+on:
+  deployment_status:
+
+jobs:
+  echo-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "start deployment"
