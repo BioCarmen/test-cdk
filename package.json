@@ -8,7 +8,8 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
-    "cdk": "cdk"
+    "cdk": "cdk",
+    "build:lambda": "npx esbuild ./lib/lambda/github-handler.ts --bundle --outfile=./dist/github-handler.js --platform=node --external:aws-sdk"
   },
   "devDependencies": {
     "@types/jest": "^27.5.0",
@@ -25,7 +26,16 @@
     "@aws-cdk/aws-codepipeline-actions": "^1.158.0",
     "@aws-cdk/pipelines": "^1.158.0",
     "aws-cdk-lib": "2.26.0",
+    "aws-sdk": "^2.1148.0",
     "constructs": "^10.0.0",
-    "source-map-support": "^0.5.21"
-  }
+    "node-fetch": "^3.2.5",
+    "source-map-support": "^0.5.21",
+    "ts-loader": "^9.3.0",
+    "webpack": "^5.73.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-node-externals": "^3.0.0"
+  },
+  "files": [
+    "dist"
+  ]
 }

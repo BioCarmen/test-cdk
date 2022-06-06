@@ -58,27 +58,25 @@ export class TestCdkStack extends Stack {
     });
     pipeline.addApplicationStage(preprod);
 
-    const stage = pipeline.addStage("Approval");
+    // const stage = pipeline.addStage("Approval");
 
-    stage.addActions(
-      new ManualApprovalAction({
-        actionName: "Approval",
-        runOrder: 1,
-      })
-    );
+    // stage.addActions(
+    //   new ManualApprovalAction({
+    //     actionName: "Approval",
+    //     runOrder: 1,
+    //   })
+    // );
     // const testingStage = pipeline.addStage(
     //   new MyPipelineAppStage(this, "test", {
     //     env: { account: "355621124855", region: "us-east-1" },
     //   })
     // );
-    const postprod = new MyPipelineAppStage(this, "prod", {
-      env: { account: "355621124855", region: "us-east-1" },
-    });
 
     new CodePipelinePostToGitHub(this, "CodePipelinePostToGithub", {
       pipeline: pipeline.codePipeline,
       githubToken: secret,
     });
+
     // testingStage.addPre(
     //   new ShellStep("Run Unit Tests", { commands: ["npm install", "npm test"] })
     // );
