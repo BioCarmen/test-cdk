@@ -69,7 +69,7 @@ export class CodePipelinePostToGitHub extends Construct {
     super(scope, id);
     console.log("interesting");
     const githubLambda = new Function(this, "githubLambdaStack", {
-      code: Code.fromAsset(path.resolve(__dirname, "./..dist"), {}), //resolving to ./lambda directory
+      code: Code.fromAsset(path.join(__dirname, "../dist")), //resolving to ./lambda directory,
       runtime: Runtime.NODEJS_14_X, //using node for this, but can easily use python or other
       handler: "github-handler.handler",
     });
