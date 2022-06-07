@@ -35,8 +35,8 @@ export const handler = async (event: any) => {
   );
 };
 const getPersonalAccessToken = () => {
-  if (process.env.ACCESS_TOKEN) {
-    return process.env.ACCESS_TOKEN as string;
+  if (process.env.GITHUB_TOKEN) {
+    return process.env.GITHUB_TOKEN as string;
   }
   throw new Error("process.env.ACCESS_TOKEN is not defined");
 };

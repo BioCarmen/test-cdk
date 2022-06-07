@@ -47,86 +47,30 @@ export class TestCdkStack extends Stack {
         buildCommand: "npm run build",
       }),
     });
-    // Use this code snippet in your app.
-    // If you need more information about configurations or implementing the sample code, visit the AWS docs:
-    // https://aws.amazon.com/developers/getting-started/nodejs/
+    const secret = secretsmanager.Secret.fromSecretNameV2(
+      this,
+      "arn:aws:secretsmanager:us-east-1:355621124855:secret:github-token-b7BN8L",
+      "github-token"
+    ).toString();
 
-    // Load the AWS SDK
-    var AWS = require("aws-sdk"),
-      region = "us-east-1",
-      secretName =
-        "arn:aws:secretsmanager:us-east-1:355621124855:secret:github-token-b7BN8L",
-      secret: any,
-      decodedBinarySecret;
-
-    // Create a Secrets Manager client
-    var client = new AWS.SecretsManager({
-      region: region,
+    const preprod = new MyPipelineAppStage(this, "test", {
+      env: { account: "355621124855", region: "us-east-1" },
     });
+    pipeline.addApplicationStage(preprod);
 
-    // In this sample we only handle the specific exceptions for the 'GetSecretValue' API.
-    // See https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
-    // We rethrow the exception by default.
-
-    client.getSecretValue({ SecretId: secretName }, (err: any, data: any) => {
-      if (err) {
-        if (err.code === "DecryptionFailureException")
-          // Secrets Manager can't decrypt the protected secret text using the provided KMS key.
-          // Deal with the exception here, and/or rethrow at your discretion.
-          throw err;
-        else if (err.code === "InternalServiceErrorException")
-          // An error occurred on the server side.
-          // Deal with the exception here, and/or rethrow at your discretion.
-          throw err;
-        else if (err.code === "InvalidParameterException")
-          // You provided an invalid value for a parameter.
-          // Deal with the exception here, and/or rethrow at your discretion.
-          throw err;
-        else if (err.code === "InvalidRequestException")
-          // You provided a parameter value that is not valid for the current state of the resource.
-          // Deal with the exception here, and/or rethrow at your discretion.
-          throw err;
-        else if (err.code === "ResourceNotFoundException")
-          // We can't find the resource that you asked for.
-          // Deal with the exception here, and/or rethrow at your discretion.
-          throw err;
-      } else {
-        // Decrypts secret using the associated KMS key.
-        // Depending on whether the secret is a string or binary, one of these fields will be populated.
-        if ("SecretString" in data) {
-          secret = data.SecretString;
-        } else {
-          let buff = new Buffer(data.SecretBinary, "base64");
-          decodedBinarySecret = buff.toString("ascii");
-        }
-      }
-
-      // Your code goes here.
-      const preprod = new MyPipelineAppStage(this, "test", {
-        env: { account: "355621124855", region: "us-east-1" },
-      });
-      pipeline.addApplicationStage(preprod);
-
-      new CodePipelinePostToGitHub(this, "CodePipelinePostToGithub", {
-        pipeline: pipeline.codePipeline,
-        githubToken: secret,
-      });
-    });
-
-    // const stage = pipeline.addStage("Approval");
-
-    // stage.addActions(
-    //   new ManualApprovalAction({
-    //     actionName: "Approval",
-    //     runOrder: 1,
-    //   })
-    // );
     // const testingStage = pipeline.addStage(
     //   new MyPipelineAppStage(this, "test", {
     //     env: { account: "355621124855", region: "us-east-1" },
     //   })
     // );
+    const postprod = new MyPipelineAppStage(this, "prod", {
+      env: { account: "355621124855", region: "us-east-1" },
+    });
 
+    new CodePipelinePostToGitHub(this, "CodePipelinePostToGithub", {
+      pipeline: pipeline.codePipeline,
+      githubToken: secret,
+    });
     // testingStage.addPre(
     //   new ShellStep("Run Unit Tests", { commands: ["npm install", "npm test"] })
     // );

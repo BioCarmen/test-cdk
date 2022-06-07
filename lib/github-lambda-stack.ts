@@ -54,6 +54,7 @@ import { PolicyStatement, Effect } from "@aws-cdk/aws-iam";
 import * as codepipeline from "@aws-cdk/aws-codepipeline";
 import { Function, InlineCode, Runtime, Code } from "@aws-cdk/aws-lambda";
 import * as path from "path";
+import * as secretsmanager from "@aws-cdk/aws-secretsmanager";
 
 import { LambdaFunction } from "@aws-cdk/aws-events-targets";
 
@@ -72,6 +73,17 @@ export class CodePipelinePostToGitHub extends Construct {
       code: Code.fromAsset(path.join(__dirname, "../dist")), //resolving to ./lambda directory,
       runtime: Runtime.NODEJS_14_X, //using node for this, but can easily use python or other
       handler: "github-handler.handler",
+      environment: {
+        GITHUB_TOKEN: secretsmanager.Secret.fromSecretAttributes(
+          this,
+          "ExampleSecretToken",
+          {
+            // replace with actual ARN for the secret token
+            secretArn:
+              "arn:aws:secretsmanager:us-east-1:355621124855:secret:github-token-b7BN8L",
+          }
+        ).secretValue.toString(),
+      },
     });
 
     githubLambda.addToRolePolicy(
@@ -80,8 +92,7 @@ export class CodePipelinePostToGitHub extends Construct {
         resources: [this.props.pipeline.pipelineArn],
       })
     );
-    console.log(this.props.githubToken);
-    githubLambda.addEnvironment("ACCESS_TOKEN", this.props.githubToken);
+
     this.props.pipeline.onStateChange("onStateChange", {
       target: new LambdaFunction(githubLambda),
     });

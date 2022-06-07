@@ -5576,8 +5576,8 @@ var handler = async (event) => {
   console.log(`Successfully notified GitHub repository ${result.owner}/${result.repository} for commit ${result.sha} with payload:`, payload);
 };
 var getPersonalAccessToken = () => {
-  if (process.env.ACCESS_TOKEN) {
-    return process.env.ACCESS_TOKEN;
+  if (process.env.GITHUB_TOKEN) {
+    return process.env.GITHUB_TOKEN;
   }
   throw new Error("process.env.ACCESS_TOKEN is not defined");
 };
