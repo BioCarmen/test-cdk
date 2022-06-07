@@ -159,8 +159,9 @@ const postStatusToGitHub = async (
         ? JSON.stringify(_payload)
         : JSON.stringify({ ...payload }),
     });
-    console.log(response);
-    const deploymentUrl = `${response.url}/statuses`;
+    const responseJson = await response.json();
+    console.log(responseJson);
+    const deploymentUrl = `${(responseJson as any).url}/statuses`;
 
     // deployment status
     const deploymentStatus = await fetch(deploymentUrl, {
@@ -171,7 +172,8 @@ const postStatusToGitHub = async (
       },
       body: JSON.stringify({ environment: "production", state: "success" }),
     });
-    console.log("deployment status", deploymentStatus);
+    const deploymentStatusJson = await deploymentStatus.json();
+    console.log("deployment status", deploymentStatus, deploymentStatusJson);
   } catch (error) {
     console.log(error);
   }

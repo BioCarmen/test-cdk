@@ -22241,8 +22241,9 @@ var postStatusToGitHub = async (owner, repository, sha, payload) => {
       },
       body: _payload ? JSON.stringify(_payload) : JSON.stringify({ ...payload })
     });
-    console.log(response);
-    const deploymentUrl = `${response.url}/statuses`;
+    const responseJson = await response.json();
+    console.log(responseJson);
+    const deploymentUrl = `${responseJson.url}/statuses`;
     const deploymentStatus = await fetch(deploymentUrl, {
       method: "POST",
       headers: {
@@ -22251,7 +22252,8 @@ var postStatusToGitHub = async (owner, repository, sha, payload) => {
       },
       body: JSON.stringify({ environment: "production", state: "success" })
     });
-    console.log("deployment status", deploymentStatus);
+    const deploymentStatusJson = await deploymentStatus.json();
+    console.log("deployment status", deploymentStatus, deploymentStatusJson);
   } catch (error) {
     console.log(error);
   }
