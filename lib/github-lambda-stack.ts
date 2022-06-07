@@ -64,20 +64,22 @@ export class CodePipelinePostToGitHub extends Construct {
     id: string,
     private props: {
       pipeline: codepipeline.Pipeline;
+      githubToken: string;
     }
   ) {
     super(scope, id);
-    const githubToken = secretsmanager.Secret.fromSecretNameV2(
-      this,
-      "SecretFromName",
-      "github-token"
-    );
+    // const githubToken = secretsmanager.Secret.fromSecretNameV2(
+    //   this,
+    //   "SecretFromName",
+    //   "github-token"
+    // );
+    console.log("props", props.githubToken);
     const githubLambda = new Function(this, "githubLambdaStack", {
       code: Code.fromAsset(path.join(__dirname, "../dist")), //resolving to ./lambda directory,
       runtime: Runtime.NODEJS_14_X, //using node for this, but can easily use python or other
       handler: "github-handler.handler",
       environment: {
-        SECRET_VALUE: githubToken.secretValue.toString(),
+        GITHUB_TOKEN: props.githubToken,
       },
     });
 

@@ -70,6 +70,7 @@ export class TestCdkStack extends Stack {
 
     new CodePipelinePostToGitHub(this, "CodePipelinePostToGithub", {
       pipeline: pipeline.codePipeline,
+      githubToken: secret.secretValue.toString(),
     });
     // testingStage.addPre(
     //   new ShellStep("Run Unit Tests", { commands: ["npm install", "npm test"] })

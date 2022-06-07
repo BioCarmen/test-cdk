@@ -5556,7 +5556,7 @@ function fixResponseChunkedTransferBadEnding(request, errorCallback) {
 var AWS = __toESM(require("aws-sdk"));
 var handler = async (event) => {
   console.log(event);
-  console.log("SECRET_VALUE \u{1F449}", process.env.SECRET_VALUE);
+  console.log("SECRET_VALUE \u{1F449}", process.env);
   const region = event.region;
   const pipelineName = event.detail.pipeline;
   const executionId = event.detail["execution-id"];
