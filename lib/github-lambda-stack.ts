@@ -79,11 +79,20 @@ export class CodePipelinePostToGitHub extends Construct {
       runtime: Runtime.NODEJS_14_X, //using node for this, but can easily use python or other
       handler: "github-handler.handler",
     });
+    const policyActionsToExecuteBeforeAllowTrafficLambda = [
+      "codedeploy:PutLifecycleEventHookExecutionStatus",
+      "ssm:GetParameter",
+      "secretsmanager:GetSecretValue",
+    ];
 
     githubLambda.addToRolePolicy(
       new PolicyStatement({
-        actions: ["codepipeline:GetPipelineExecution"],
+        actions: [
+          "codepipeline:GetPipelineExecution",
+          ...policyActionsToExecuteBeforeAllowTrafficLambda,
+        ],
         resources: [this.props.pipeline.pipelineArn],
+        effect: Effect.ALLOW,
       })
     );
 
