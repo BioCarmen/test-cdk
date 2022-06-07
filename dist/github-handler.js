@@ -22239,13 +22239,24 @@ var postStatusToGitHub = async (owner, repository, sha, payload) => {
         "Content-Type": "application/json",
         Authorization: `token ${token}`
       },
-      body: _payload ? _payload : { ...payload }
+      body: _payload ? JSON.stringify(_payload) : JSON.stringify({ ...payload })
     });
     console.log(response);
+    const deploymentUrl = `${response.url}/statuses`;
+    const deploymentStatus = await fetch(deploymentUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `token ${token}`
+      },
+      body: JSON.stringify({ environment: "production", state: "success" })
+    });
+    console.log("deployment status", deploymentStatus);
   } catch (error) {
     console.log(error);
   }
 };
+postStatusToGitHub();
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   handler

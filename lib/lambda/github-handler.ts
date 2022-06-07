@@ -133,13 +133,17 @@ function createPayload(pipelineName: string, region: string, status: string) {
 }
 
 const postStatusToGitHub = async (
-  owner: string | undefined,
-  repository: string | undefined,
-  sha: any,
-  payload: any
+  owner?: string | undefined,
+  repository?: string | undefined,
+  sha?: any,
+  payload?: any
 ) => {
   const url = `https://api.github.com/repos/BioCarmen/test-cdk/deployments`;
   //   const url = `/${owner}/${repository}/statuses/${sha}`;
+  //   const _payload = {
+  //     payload: "ok",
+  //     ref: "8975f5baa9dfbd75eaf40310c1d7b7bbf733ccf6",
+  //   };
   const _payload = { payload: "ok", ref: sha };
   const token = await getPersonalAccessToken();
   console.log("token", token);
@@ -151,10 +155,25 @@ const postStatusToGitHub = async (
         "Content-Type": "application/json",
         Authorization: `token ${token}`,
       },
-      body: _payload ? _payload : { ...payload },
+      body: _payload
+        ? JSON.stringify(_payload)
+        : JSON.stringify({ ...payload }),
     });
     console.log(response);
+    const deploymentUrl = `${response.url}/statuses`;
+
+    // deployment status
+    const deploymentStatus = await fetch(deploymentUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `token ${token}`,
+      },
+      body: JSON.stringify({ environment: "production", state: "success" }),
+    });
+    console.log("deployment status", deploymentStatus);
   } catch (error) {
     console.log(error);
   }
 };
+postStatusToGitHub();
