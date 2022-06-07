@@ -3,6 +3,7 @@ import fetch from "node-fetch";
 import * as AWS from "aws-sdk";
 export const handler = async (event: any) => {
   console.log(event);
+  console.log("SECRET_VALUE 👉", process.env.SECRET_VALUE);
   const region = event.region;
   const pipelineName = event.detail.pipeline;
   const executionId = event.detail["execution-id"];

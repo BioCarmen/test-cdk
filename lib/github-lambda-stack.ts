@@ -64,25 +64,20 @@ export class CodePipelinePostToGitHub extends Construct {
     id: string,
     private props: {
       pipeline: codepipeline.Pipeline;
-      githubToken: string;
     }
   ) {
     super(scope, id);
-    console.log("interesting");
+    const githubToken = secretsmanager.Secret.fromSecretNameV2(
+      this,
+      "SecretFromName",
+      "github-token"
+    );
     const githubLambda = new Function(this, "githubLambdaStack", {
       code: Code.fromAsset(path.join(__dirname, "../dist")), //resolving to ./lambda directory,
       runtime: Runtime.NODEJS_14_X, //using node for this, but can easily use python or other
       handler: "github-handler.handler",
       environment: {
-        GITHUB_TOKEN: secretsmanager.Secret.fromSecretAttributes(
-          this,
-          "ExampleSecretToken",
-          {
-            // replace with actual ARN for the secret token
-            secretArn:
-              "arn:aws:secretsmanager:us-east-1:355621124855:secret:github-token-b7BN8L",
-          }
-        ).secretValue.toString(),
+        SECRET_VALUE: githubToken.secretValue.toString(),
       },
     });
 
