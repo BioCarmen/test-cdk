@@ -78,9 +78,6 @@ export class CodePipelinePostToGitHub extends Construct {
       code: Code.fromAsset(path.join(__dirname, "../dist")), //resolving to ./lambda directory,
       runtime: Runtime.NODEJS_14_X, //using node for this, but can easily use python or other
       handler: "github-handler.handler",
-      environment: {
-        GITHUB_TOKEN: props.githubToken,
-      },
     });
 
     githubLambda.addToRolePolicy(

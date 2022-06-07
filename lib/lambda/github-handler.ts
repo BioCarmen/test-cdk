@@ -1,9 +1,38 @@
 import { CodePipeline } from "@aws-cdk/pipelines";
 import fetch from "node-fetch";
 import * as AWS from "aws-sdk";
+import { SecretsManager } from "@aws-sdk/client-secrets-manager";
+const getSecrets = async ({
+  secretName,
+}: {
+  secretName: string;
+}): Promise<Record<string, string>> => {
+  const client = new SecretsManager({ region: "us-east-1" });
+
+  try {
+    const data = await client.getSecretValue({ SecretId: secretName });
+
+    if ("SecretString" in data) {
+      const secret = JSON.parse(data.SecretString!);
+
+      return secret;
+    }
+  } catch (error) {
+    console.error({
+      message: `Unable to load secret key '${secretName}'`,
+      details: (error as any).toString(),
+    });
+  }
+
+  return {
+    DIAGNOSTIC_API_KEY: "",
+  };
+};
+
 export const handler = async (event: any) => {
   console.log(event);
-  console.log("SECRET_VALUE 👉", process.env);
+  const secrets = await getSecrets({ secretName: "github-token" });
+  console.log(secrets);
   const region = event.region;
   const pipelineName = event.detail.pipeline;
   const executionId = event.detail["execution-id"];
