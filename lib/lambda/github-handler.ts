@@ -176,4 +176,3 @@ const postStatusToGitHub = async (
     console.log(error);
   }
 };
-postStatusToGitHub();

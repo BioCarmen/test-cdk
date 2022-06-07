@@ -22256,7 +22256,6 @@ var postStatusToGitHub = async (owner, repository, sha, payload) => {
     console.log(error);
   }
 };
-postStatusToGitHub();
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   handler
