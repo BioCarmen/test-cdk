@@ -60,10 +60,9 @@ export const handler = async (event: any) => {
     payload
   );
 };
-const getPersonalAccessToken = () => {
-  if (process.env.GITHUB_TOKEN) {
-    return process.env.GITHUB_TOKEN as string;
-  }
+const getPersonalAccessToken = async () => {
+  const secrets = await getSecrets({ secretName: "github-token" });
+  return secrets;
   throw new Error("process.env.ACCESS_TOKEN is not defined");
 };
 
@@ -143,13 +142,14 @@ const postStatusToGitHub = async (
   const url = `https://api.github.com/repos/BioCarmen/test-cdk/deployments`;
   //   const url = `/${owner}/${repository}/statuses/${sha}`;
   const _payload = { ...payload, ref: sha };
+  const token = await getPersonalAccessToken();
   console.log(_payload, sha);
   try {
     const response = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `token ${getPersonalAccessToken()}`,
+        Authorization: `token ${token}`,
       },
       body: _payload,
     });

@@ -22128,14 +22128,12 @@ function fixResponseChunkedTransferBadEnding(request, errorCallback) {
 // lib/lambda/github-handler.ts
 var AWS = __toESM(require("aws-sdk"));
 var import_client_secrets_manager = __toESM(require_dist_cjs44());
-var getSecrets = async ({
-  secretName
-}) => {
+var getSecrets = async ({ secretName }) => {
   const client = new import_client_secrets_manager.SecretsManager({ region: "us-east-1" });
   try {
     const data = await client.getSecretValue({ SecretId: secretName });
     if ("SecretString" in data) {
-      const secret = JSON.parse(data.SecretString);
+      const secret = data.SecretString;
       return secret;
     }
   } catch (error) {
@@ -22171,10 +22169,9 @@ var handler = async (event) => {
   console.log("post response", response);
   console.log(`Successfully notified GitHub repository ${result.owner}/${result.repository} for commit ${result.sha} with payload:`, payload);
 };
-var getPersonalAccessToken = () => {
-  if (process.env.GITHUB_TOKEN) {
-    return process.env.GITHUB_TOKEN;
-  }
+var getPersonalAccessToken = async () => {
+  const secrets = await getSecrets({ secretName: "github-token" });
+  return secrets;
   throw new Error("process.env.ACCESS_TOKEN is not defined");
 };
 var getPipelineExecution = async (pipelineName, executionId) => {
@@ -22234,13 +22231,14 @@ function createPayload(pipelineName, region, status) {
 var postStatusToGitHub = async (owner, repository, sha, payload) => {
   const url = `https://api.github.com/repos/BioCarmen/test-cdk/deployments`;
   const _payload = { ...payload, ref: sha };
+  const token = await getPersonalAccessToken();
   console.log(_payload, sha);
   try {
     const response = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `token ${getPersonalAccessToken()}`
+        Authorization: `token ${token}`
       },
       body: _payload
     });
