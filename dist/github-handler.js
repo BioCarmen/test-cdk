@@ -22148,8 +22148,6 @@ var getSecrets = async ({ secretName }) => {
 };
 var handler = async (event) => {
   console.log(event);
-  const secrets = await getSecrets({ secretName: "github-token" });
-  console.log(secrets);
   const region = event.region;
   const pipelineName = event.detail.pipeline;
   const executionId = event.detail["execution-id"];
@@ -22232,6 +22230,7 @@ var postStatusToGitHub = async (owner, repository, sha, payload) => {
   const url = `https://api.github.com/repos/BioCarmen/test-cdk/deployments`;
   const _payload = { ...payload, ref: sha };
   const token = await getPersonalAccessToken();
+  console.log("token", token);
   console.log(_payload, sha);
   try {
     const response = await fetch(url, {

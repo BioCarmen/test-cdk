@@ -27,8 +27,7 @@ const getSecrets = async ({ secretName }: { secretName: string }) => {
 
 export const handler = async (event: any) => {
   console.log(event);
-  const secrets = await getSecrets({ secretName: "github-token" });
-  console.log(secrets);
+
   const region = event.region;
   const pipelineName = event.detail.pipeline;
   const executionId = event.detail["execution-id"];
@@ -143,6 +142,7 @@ const postStatusToGitHub = async (
   //   const url = `/${owner}/${repository}/statuses/${sha}`;
   const _payload = { ...payload, ref: sha };
   const token = await getPersonalAccessToken();
+  console.log("token", token);
   console.log(_payload, sha);
   try {
     const response = await fetch(url, {
