@@ -158,9 +158,3 @@ const postStatusToGitHub = async (
     console.log(error);
   }
 };
-
-// curl \
-//   -X POST \
-//   -H "Accept: application/vnd.github.v3+json" \
-//   https://api.github.com/repos/BioCarmen/test-cdk/deployments \
-//   -d '{"ref":"topic-branch","payload":"{ \"deploy\": \"migrate\" }","description":"Deploy request from hubot"}' -H  "Authorization: token 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"
