@@ -5575,6 +5575,12 @@ var handler = async (event) => {
   console.log("post response", response);
   console.log(`Successfully notified GitHub repository ${result.owner}/${result.repository} for commit ${result.sha} with payload:`, payload);
 };
+var getPersonalAccessToken = () => {
+  if (process.env.ACCESS_TOKEN) {
+    return process.env.ACCESS_TOKEN;
+  }
+  throw new Error("process.env.ACCESS_TOKEN is not defined");
+};
 var getPipelineExecution = async (pipelineName, executionId) => {
   var _a, _b, _c;
   const params = {
@@ -5638,7 +5644,7 @@ var postStatusToGitHub = async (owner, repository, sha, payload) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `token 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`
+        Authorization: `token ${getPersonalAccessToken()}`
       },
       body: _payload
     });
