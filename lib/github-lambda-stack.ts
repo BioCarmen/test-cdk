@@ -83,15 +83,13 @@ export class CodePipelinePostToGitHub extends Construct {
       "codedeploy:PutLifecycleEventHookExecutionStatus",
       "ssm:GetParameter",
       "secretsmanager:GetSecretValue",
+      "codepipeline:GetPipelineExecution",
     ];
 
     githubLambda.addToRolePolicy(
       new PolicyStatement({
-        actions: [
-          "codepipeline:GetPipelineExecution",
-          ...policyActionsToExecuteBeforeAllowTrafficLambda,
-        ],
-        resources: [this.props.pipeline.pipelineArn],
+        actions: [...policyActionsToExecuteBeforeAllowTrafficLambda],
+        resources: ["*"],
         effect: Effect.ALLOW,
       })
     );
