@@ -123,7 +123,7 @@ const postStatusToGitHub = async (
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `token ${getPersonalAccessToken()}`,
+        Authorization: `token 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`,
       },
       body: _payload,
     });
