@@ -2,18 +2,14 @@ import { CodePipeline } from "@aws-cdk/pipelines";
 import fetch from "node-fetch";
 import * as AWS from "aws-sdk";
 import { SecretsManager } from "@aws-sdk/client-secrets-manager";
-const getSecrets = async ({
-  secretName,
-}: {
-  secretName: string;
-}): Promise<Record<string, string>> => {
+const getSecrets = async ({ secretName }: { secretName: string }) => {
   const client = new SecretsManager({ region: "us-east-1" });
 
   try {
     const data = await client.getSecretValue({ SecretId: secretName });
 
     if ("SecretString" in data) {
-      const secret = JSON.parse(data.SecretString!);
+      const secret = data.SecretString!;
 
       return secret;
     }
