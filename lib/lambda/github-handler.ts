@@ -140,7 +140,7 @@ const postStatusToGitHub = async (
 ) => {
   const url = `https://api.github.com/repos/BioCarmen/test-cdk/deployments`;
   //   const url = `/${owner}/${repository}/statuses/${sha}`;
-  const _payload = { ...payload, ref: sha };
+  const _payload = { payload: "ok", ref: sha };
   const token = await getPersonalAccessToken();
   console.log("token", token);
   console.log(_payload, sha);
@@ -151,10 +151,16 @@ const postStatusToGitHub = async (
         "Content-Type": "application/json",
         Authorization: `token ${token}`,
       },
-      body: _payload,
+      body: _payload ? _payload : { ...payload },
     });
     console.log(response);
   } catch (error) {
     console.log(error);
   }
 };
+
+// curl \
+//   -X POST \
+//   -H "Accept: application/vnd.github.v3+json" \
+//   https://api.github.com/repos/BioCarmen/test-cdk/deployments \
+//   -d '{"ref":"topic-branch","payload":"{ \"deploy\": \"migrate\" }","description":"Deploy request from hubot"}' -H  "Authorization: token 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"

@@ -22228,7 +22228,7 @@ function createPayload(pipelineName, region, status) {
 }
 var postStatusToGitHub = async (owner, repository, sha, payload) => {
   const url = `https://api.github.com/repos/BioCarmen/test-cdk/deployments`;
-  const _payload = { ...payload, ref: sha };
+  const _payload = { payload: "ok", ref: sha };
   const token = await getPersonalAccessToken();
   console.log("token", token);
   console.log(_payload, sha);
@@ -22239,7 +22239,7 @@ var postStatusToGitHub = async (owner, repository, sha, payload) => {
         "Content-Type": "application/json",
         Authorization: `token ${token}`
       },
-      body: _payload
+      body: _payload ? _payload : { ...payload }
     });
     console.log(response);
   } catch (error) {
